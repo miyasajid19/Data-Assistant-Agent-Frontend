@@ -334,18 +334,23 @@ export function ChatWindow({
             onAsk={(q) => send(q)}
           />
         )}
-        {plan.length > 0 && (
-          <PlanMessage
-            plan={plan}
-            toolResultsCount={0}
-            busy={busy && phases.act === "current"}
-          />
-        )}
         {busy && plan.length === 0 && <PlanViewer phases={phases} tools={[]} busy={busy} />}
         {messages.map((m, i) => (
           <MessageBubble key={i} msg={m} onChartClick={onChartClick} />
         ))}
       </div>
+
+      {/* Plan card pinned just above the input bar so the user always sees
+          what the agent is about to do, no matter how far the chat scrolls. */}
+      {plan.length > 0 && (
+        <div className="plan-pin">
+          <PlanMessage
+            plan={plan}
+            toolResultsCount={0}
+            busy={busy && phases.act === "current"}
+          />
+        </div>
+      )}
 
       <input
         ref={fileInputRef}
@@ -544,20 +549,50 @@ function WelcomeEmpty({
   uploading: boolean;
   onPickSuggestion: (q: string) => void;
 }) {
+  // Tool-flavored starter commands — not "Hi! How can I help?" energy.
   const suggestions = [
-    "Hi! What can you help me with?",
-    "Explain what a CSV file is.",
-    "Help me write a SQL query for top customers by revenue.",
+    "Summarise the columns of my file once I upload it.",
+    "Plot a histogram of every numeric column.",
+    "Find rows where a numeric column is more than 3 σ from its mean.",
   ];
   return (
     <div className="welcome-empty">
-      <div className="welcome-avatar">✦</div>
-      <h2 className="welcome-title">Hey! I'm your data assistant.</h2>
+      <div className="welcome-head">
+        <span className="welcome-eyebrow">Empty thread</span>
+        <span className="welcome-status">
+          <span className="welcome-status-dot" />
+          No dataset bound
+        </span>
+      </div>
+
+      <h2 className="welcome-title">Start a thread.</h2>
       <p className="welcome-sub">
-        Ask me anything — I'll chat, brainstorm, draft, summarize, explain code.
-        When you're ready to dig into a CSV or Excel, click the paperclip below
-        and I'll switch into data-analysis mode (with plans, tools, and charts).
+        Upload a CSV or Excel to begin a data session, or type a question and
+        the agent will respond from general knowledge. Switching modes is
+        automatic — the moment a dataset is bound, plans and charts appear.
       </p>
+
+      <div className="welcome-actions">
+        <button
+          className="welcome-upload-btn"
+          onClick={onPickFiles}
+          disabled={uploading}
+        >
+          {uploading ? (
+            <>
+              <span className="btn-spinner" /> Uploading
+            </>
+          ) : (
+            <>
+              <PaperclipIcon size={16} />
+              <span>Upload CSV / Excel</span>
+            </>
+          )}
+        </button>
+        <span className="welcome-or">…or drop a file</span>
+      </div>
+
+      <div className="welcome-suggestions-label">Try one of these</div>
       <div className="welcome-suggestions">
         {suggestions.map((q) => (
           <button
@@ -566,28 +601,9 @@ function WelcomeEmpty({
             className="welcome-chip"
             onClick={() => onPickSuggestion(q)}
           >
-            {q}
+            <span>{q}</span>
           </button>
         ))}
-      </div>
-      <button
-        className="welcome-upload-btn"
-        onClick={onPickFiles}
-        disabled={uploading}
-      >
-        {uploading ? (
-          <>
-            <span className="btn-spinner" /> Uploading…
-          </>
-        ) : (
-          <>
-            <PaperclipIcon size={18} />
-            <span>Upload CSV or Excel</span>
-          </>
-        )}
-      </button>
-      <div className="welcome-divider">
-        <span>or drop a file anywhere</span>
       </div>
     </div>
   );

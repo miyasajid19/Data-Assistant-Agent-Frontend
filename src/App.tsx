@@ -433,7 +433,6 @@ export function ChatRoute() {
       <aside className="left-rail">
         <div className="left-rail-inner">
           <div className="brand">
-            <span className="logo-dot" />
             <span className="brand-name">Data Assistant</span>
           </div>
           <ChatHistory

@@ -8,51 +8,6 @@ import {
   HistoryIcon,
 } from "../components/icons";
 
-type Feature = {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-};
-
-const FEATURES: Feature[] = [
-  {
-    icon: <UploadIcon size={20} />,
-    title: "Drop in any CSV",
-    body:
-      "Upload one or more tabular files and the agent auto-builds schemas, joins and suggested questions for you.",
-  },
-  {
-    icon: <PlanIcon size={20} />,
-    title: "Plan → Act → Observe",
-    body:
-      "Every request goes through an explicit plan you can inspect before tools run. Nothing executes in the dark.",
-  },
-  {
-    icon: <ChartIcon size={20} />,
-    title: "Charts that think",
-    body:
-      "Bar, line, scatter, histogram and heatmap renders from pandas — click any chart to expand and inspect the data.",
-  },
-  {
-    icon: <HistoryIcon size={20} />,
-    title: "Persistent threads",
-    body:
-      "Each conversation is its own thread tied to a dataset session — pick up where you left off, even after a refresh.",
-  },
-  {
-    icon: <ShieldIcon size={20} />,
-    title: "Sandboxed execution",
-    body:
-      "Tool calls run against in-memory dataframes with explicit signatures. The LLM never touches your filesystem directly.",
-  },
-  {
-    icon: <SparkleIcon size={20} />,
-    title: "Reasoned answers",
-    body:
-      "Final responses include the plan, the tool calls and the observed results — so you can trust the answer, not just read it.",
-  },
-];
-
 export function Landing() {
   const navigate = useNavigate();
 
@@ -60,18 +15,15 @@ export function Landing() {
     <div className="landing">
       <div className="landing-bg" aria-hidden="true">
         <div className="landing-bg-grid" />
-        <div className="landing-bg-glow landing-bg-glow-a" />
-        <div className="landing-bg-glow landing-bg-glow-b" />
       </div>
 
       <header className="landing-nav">
         <div className="landing-brand">
-          <span className="logo-dot" />
           <span className="landing-brand-name">Data Assistant</span>
         </div>
         <nav className="landing-nav-links">
-          <a href="#features">Features</a>
-          <a href="#how-it-works">How it works</a>
+          <a href="#capabilities">Capabilities</a>
+          <a href="#loop">Loop</a>
           <button
             className="landing-nav-cta"
             onClick={() => navigate("/chat")}
@@ -82,130 +34,256 @@ export function Landing() {
       </header>
 
       <main className="landing-main">
+        {/* ---- HERO ---- asymmetric: copy on the left, a live agent demo on the right */}
         <section className="landing-hero">
-          <span className="landing-eyebrow">
-            <SparkleIcon size={14} /> Techvruk · 2026
-          </span>
-          <h1 className="landing-title">
-            Talk to your data.<br />
-            <span className="landing-title-accent">Get a reasoned answer.</span>
-          </h1>
-          <p className="landing-sub">
-            Data Assistant Agent is an agentic analyst: upload a CSV, ask in
-            plain English, and watch it plan, run pandas tools and explain the
-            result — with charts you can click into.
-          </p>
-          <div className="landing-actions">
-            <button
-              className="landing-btn landing-btn-primary"
-              onClick={() => navigate("/chat")}
-            >
-              Start chat
-              <span className="landing-btn-arrow" aria-hidden="true">→</span>
-            </button>
-            <a className="landing-btn landing-btn-ghost" href="#features">
-              See what it can do
-            </a>
+          <div className="landing-hero-copy">
+            <p className="landing-kicker">Techvruk 2026</p>
+            <h1 className="landing-title">
+              Talk to your data.<br />
+              <em className="landing-title-em">Get a reasoned answer.</em>
+            </h1>
+            <p className="landing-sub">
+              An agentic analyst for CSV and Excel. Drop a file, ask in plain
+              English, watch it plan the work, run pandas and plotting tools,
+              and answer with charts you can open and inspect.
+            </p>
+            <div className="landing-actions">
+              <button
+                className="landing-btn landing-btn-primary"
+                onClick={() => navigate("/chat")}
+              >
+                Start chat
+              </button>
+              <a className="landing-btn landing-btn-ghost" href="#loop">
+                See the loop
+              </a>
+            </div>
+            <ul className="landing-meta">
+              <li>
+                <span className="landing-meta-num">9</span>
+                <span className="landing-meta-lbl">pandas and plot tools</span>
+              </li>
+              <li>
+                <span className="landing-meta-num">4</span>
+                <span className="landing-meta-lbl">steps in the agent loop</span>
+              </li>
+              <li>
+                <span className="landing-meta-num">∞</span>
+                <span className="landing-meta-lbl">threads per session</span>
+              </li>
+            </ul>
           </div>
-          <div className="landing-stats">
-            <div>
-              <div className="landing-stat-num">9</div>
-              <div className="landing-stat-lbl">Pandas / plot tools</div>
+
+          {/* Live-feeling agent demo — a single composed card, not a marquee */}
+          <aside className="landing-demo" aria-label="Example agent run">
+            <div className="landing-demo-bar">
+              <span className="landing-demo-dot" />
+              <span className="landing-demo-dot" />
+              <span className="landing-demo-dot" />
+              <span className="landing-demo-title">agent run · matches.csv</span>
             </div>
-            <div>
-              <div className="landing-stat-num">4</div>
-              <div className="landing-stat-lbl">Plan · Act · Observe · Respond</div>
+            <div className="landing-demo-body">
+              <div className="landing-demo-plan">
+                <div className="landing-demo-plan-head">
+                  <PlanIcon size={14} /> Plan
+                </div>
+                <ol>
+                  <li>group rows by <code>Season</code></li>
+                  <li>count rows and render a bar chart</li>
+                </ol>
+              </div>
+              <div className="landing-demo-tools">
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">tool</span> plot_bar</span>
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> x=Season</span>
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> agg=count</span>
+              </div>
+              <div className="landing-demo-chart" aria-hidden="true">
+                <svg viewBox="0 0 280 110" preserveAspectRatio="none">
+                  {[28, 42, 38, 56, 64, 58, 72, 85, 78].map((h, i) => (
+                    <rect
+                      key={i}
+                      x={10 + i * 30}
+                      y={100 - h}
+                      width={20}
+                      height={h}
+                      rx={2}
+                      fill="#9ee493"
+                      fillOpacity={0.85 - i * 0.04}
+                    />
+                  ))}
+                </svg>
+                <div className="landing-demo-chart-cap">
+                  Matches per season · 2008–2017
+                </div>
+              </div>
+              <div className="landing-demo-msg landing-demo-msg-assistant">
+                <SparkleIcon size={14} />
+                <span>
+                  <strong>2013 had the most matches</strong> (76). The series
+                  trends up overall, with 2011–2013 the busiest stretch.
+                </span>
+              </div>
             </div>
-            <div>
-              <div className="landing-stat-num">∞</div>
-              <div className="landing-stat-lbl">Threads per dataset</div>
-            </div>
-          </div>
+          </aside>
         </section>
 
-        <section id="features" className="landing-features">
-          <div className="landing-section-label">What's inside</div>
+        {/* ---- CAPABILITIES ---- bento grid, mixed treatments, no identical cards */}
+        <section id="capabilities" className="landing-capabilities">
           <h2 className="landing-section-title">
-            Built for honest, inspectable analytics
+            Built for honest, inspectable analytics.
           </h2>
-          <div className="landing-feature-grid">
-            {FEATURES.map((f) => (
-              <article key={f.title} className="landing-feature-card">
-                <div className="landing-feature-icon">{f.icon}</div>
-                <h3 className="landing-feature-title">{f.title}</h3>
-                <p className="landing-feature-body">{f.body}</p>
-              </article>
-            ))}
+
+          <div className="landing-bento">
+            {/* Big feature — CSV upload, with mock UI */}
+            <article className="landing-bento-card landing-bento-hero">
+              <div className="landing-bento-card-body">
+                <div className="landing-bento-icon">
+                  <UploadIcon size={18} />
+                </div>
+                <h3>Drop in a CSV — or several.</h3>
+                <p>
+                  Upload one file or many. The agent infers schemas, suggests
+                  joins, and surfaces the questions that are worth asking
+                  before you do.
+                </p>
+              </div>
+              <div className="landing-bento-mock" aria-hidden="true">
+                <div className="landing-mock-file">
+                  <UploadIcon size={12} />
+                  <span>matches.csv</span>
+                  <span className="landing-mock-meta">1.2 MB · 756 rows</span>
+                </div>
+                <div className="landing-mock-file">
+                  <UploadIcon size={12} />
+                  <span>deliveries.csv</span>
+                  <span className="landing-mock-meta">380 KB · 5,032 rows</span>
+                </div>
+                <div className="landing-mock-hint">
+                  <SparkleIcon size={12} />
+                  joinable on <code>match_id</code> · suggested questions ready
+                </div>
+              </div>
+            </article>
+
+            {/* Plan → Act → Observe */}
+            <article className="landing-bento-card">
+              <div className="landing-bento-icon"><PlanIcon size={18} /></div>
+              <h3>An explicit plan, every time.</h3>
+              <p>
+                Before any tool runs, the agent writes what it's going to do.
+                Nothing executes in the dark — you can read it, reject it, or
+                guide it.
+              </p>
+            </article>
+
+            {/* Charts that think */}
+            <article className="landing-bento-card">
+              <div className="landing-bento-icon"><ChartIcon size={18} /></div>
+              <h3>Charts with citations.</h3>
+              <p>
+                Bar, line, scatter, histogram, heatmap, violin — every plot
+                is rendered from pandas and tied to the row of output that
+                produced it.
+              </p>
+            </article>
+
+            {/* Sandbox */}
+            <article className="landing-bento-card">
+              <div className="landing-bento-icon"><ShieldIcon size={18} /></div>
+              <h3>Sandboxed by signature.</h3>
+              <p>
+                Tools run against in-memory DataFrames with explicit argument
+                schemas. The model never touches your filesystem.
+              </p>
+            </article>
+
+            {/* Persistent threads */}
+            <article className="landing-bento-card">
+              <div className="landing-bento-icon"><HistoryIcon size={18} /></div>
+              <h3>Threads that outlive the tab.</h3>
+              <p>
+                Each conversation lives in its own thread bound to a session —
+                close the browser, reopen it, pick up where you left off.
+              </p>
+            </article>
+
+            {/* Code snippet card — visual variety, not another paragraph */}
+            <article className="landing-bento-card landing-bento-code">
+              <div className="landing-bento-code-head">
+                <span className="landing-bento-code-file">tools.py</span>
+                <span className="landing-bento-code-tag">strict signature</span>
+              </div>
+              <pre><code>{`def plot_bar(
+    df: pd.DataFrame,
+    x: str,
+    y: Optional[str] = None,
+    agg: Literal["sum", "mean", "count"] = "sum",
+) -> ChartArtifact:
+    ...`}</code></pre>
+              <p className="landing-bento-code-cap">
+                No nested kwargs, no surprise writes — the LLM gets exactly
+                this surface and nothing more.
+              </p>
+            </article>
           </div>
         </section>
 
-        <section id="how-it-works" className="landing-how">
-          <div className="landing-section-label">How it works</div>
-          <h2 className="landing-section-title">Four steps, every question</h2>
+        {/* ---- LOOP ---- four steps, kept as a sequence because it is one */}
+        <section id="loop" className="landing-loop">
+          <h2 className="landing-section-title">Four steps, every question.</h2>
+
           <ol className="landing-steps">
             <li>
               <span className="landing-step-num">01</span>
-              <div>
-                <h4>Plan</h4>
-                <p>
-                  The agent reads your question + dataset schema and writes an
-                  explicit plan — shown to you before any tool runs.
-                </p>
-              </div>
+              <h4>Plan</h4>
+              <p>
+                The agent reads your question and the dataset's schema, then
+                writes an explicit plan — shown to you before any tool runs.
+              </p>
             </li>
             <li>
               <span className="landing-step-num">02</span>
-              <div>
-                <h4>Act</h4>
-                <p>
-                  It calls pandas / plotting tools against your data with strict
-                  signatures — no hidden side effects, no surprise writes.
-                </p>
-              </div>
+              <h4>Act</h4>
+              <p>
+                It calls pandas and plotting tools against your data with
+                strict signatures. No hidden side effects, no surprise writes.
+              </p>
             </li>
             <li>
               <span className="landing-step-num">03</span>
-              <div>
-                <h4>Observe</h4>
-                <p>
-                  Each tool result is summarized back into the conversation, so
-                  the agent can revise the plan if a step surprises it.
-                </p>
-              </div>
+              <h4>Observe</h4>
+              <p>
+                Each tool result is summarised back into the conversation, so
+                the agent can revise the plan when a step surprises it.
+              </p>
             </li>
             <li>
               <span className="landing-step-num">04</span>
-              <div>
-                <h4>Respond</h4>
-                <p>
-                  A final answer that cites the tools it used and the numbers it
-                  found — plus charts you can expand.
-                </p>
-              </div>
+              <h4>Respond</h4>
+              <p>
+                A final answer that cites the tools it used and the numbers it
+                found — with charts you can open and inspect.
+              </p>
             </li>
           </ol>
         </section>
 
-        <section className="landing-cta">
-          <div className="landing-cta-card">
-            <h2>Ready to ask something?</h2>
-            <p>
-              Drop a CSV in the chat, or just type a question — the agent will
-              tell you what it plans to do before it does it.
-            </p>
-            <button
-              className="landing-btn landing-btn-primary landing-btn-lg"
-              onClick={() => navigate("/chat")}
-            >
-              Start chat
-              <span className="landing-btn-arrow" aria-hidden="true">→</span>
-            </button>
-          </div>
+        {/* ---- QUIET FOOTER-CTA ---- a single line, no gradient card ---- */}
+        <section className="landing-end">
+          <p>Drop a CSV in the chat — or just type a question.</p>
+          <button
+            className="landing-btn landing-btn-primary"
+            onClick={() => navigate("/chat")}
+          >
+            Start chat
+          </button>
         </section>
       </main>
 
       <footer className="landing-foot">
-        <span>Data Assistant Agent · MiniMax-M3 · LangGraph · FastAPI · React</span>
+        <span>
+          Data Assistant Agent — MiniMax-M3, LangGraph, FastAPI, React
+        </span>
         <span>Built for Techvruk 2026</span>
       </footer>
     </div>
