@@ -67,7 +67,6 @@ export function OverviewMessage({
                     className="followup-chip"
                     onClick={() => onAsk?.(q)}
                   >
-                    <span className="followup-icon">✦</span>
                     {q}
                   </button>
                 ))}

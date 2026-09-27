@@ -2,6 +2,21 @@ import { useRef, useState } from "react";
 import type { DatasetInfo, ToolCall } from "../types";
 import { addFilesToSession, deleteDataset, renameDataset, replaceDataset } from "../api";
 
+// Human-readable label for an artifact URL: pull the filename from the path
+// and strip its numeric prefix (e.g. "538b166ac413/total_output_by_ajmal_level.png"
+// -> "Total output by ajmal level"). Used for alt text + tooltip so users see a
+// meaningful caption instead of "artifact 1" when an image renders.
+function artifactLabel(url: string): string {
+  try {
+    const file = decodeURIComponent(url.split("/").pop() ?? "");
+    const stem = file.replace(/\.png$/i, "");
+    const slug = stem.replace(/^[a-z0-9]{6,}_/i, "");
+    return slug.replace(/[_-]+/g, " ").trim() || stem || "chart";
+  } catch {
+    return "chart";
+  }
+}
+
 export function ToolsPanel({
   datasets,
   activeDatasetId,
@@ -206,24 +221,46 @@ export function ToolsPanel({
             <span className="badge">{artifacts.length}</span>
           </h3>
           <div className="artifact-list">
-            {artifacts.map((a, i) => (
-              <button
-                key={i}
-                type="button"
-                className="artifact-thumb"
-                title="Open in lightbox"
-                onClick={() => onArtifactClick?.(a)}
-              >
-                <img src={a} alt={`artifact ${i + 1}`} />
-              </button>
-            ))}
+            {artifacts.map((a, i) => {
+              const label = artifactLabel(a);
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className="artifact-thumb"
+                  title={`${label} — click to enlarge`}
+                  onClick={() => onArtifactClick?.(a)}
+                >
+                  <img
+                    src={a}
+                    alt={label}
+                    loading="lazy"
+                    onError={(e) => {
+                      // The backend was reachable when this URL was emitted,
+                      // but the browser couldn't fetch it (proxy down, stale
+                      // cache, etc.). Show a clear broken state so the user
+                      // knows the chart exists but isn't rendering, instead
+                      // of a meaningless "artifact N" alt string.
+                      const img = e.currentTarget;
+                      img.style.visibility = "hidden";
+                      const parent = img.parentElement;
+                      if (parent && !parent.querySelector(".artifact-broken")) {
+                        const note = document.createElement("div");
+                        note.className = "artifact-broken";
+                        note.textContent = "chart unavailable";
+                        parent.appendChild(note);
+                      }
+                    }}
+                  />
+                </button>
+              );
+            })}
           </div>
         </section>
       )}
 
       {datasets.length === 0 && tools.length === 0 && artifacts.length === 0 && (
         <div className="panel-empty">
-          <div className="panel-empty-icon">✨</div>
           <div className="panel-empty-text">
             Datasets, tool calls, and generated charts will appear here as the
             agent works.

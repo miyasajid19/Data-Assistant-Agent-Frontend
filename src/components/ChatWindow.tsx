@@ -444,7 +444,20 @@ function prepareAssistantContent(
     /^\s*[\{\[]\s*"/.test(m) || /^\s*[\{\[]\s*'/.test(m) ? "" : m,
   );
 
-  // 3) Ensure every /artifacts/*.png URL is wrapped in markdown image syntax
+  // 3a) Convert "[caption](/artifacts/foo.png)" link syntax to image syntax.
+  //     The LLM frequently writes the chart as a markdown link (clickable text)
+  //     instead of an inline image, which leaves the chat bubble showing a
+  //     hyperlink to the chart rather than the chart itself. Promoting link
+  //     syntax to image syntax makes the bubble render the chart inline, like
+  //     the ToolsPanel thumbnail already does. We only promote when the target
+  //     URL clearly points at a chart artifact (session id + .png), so genuine
+  //     links to other resources stay links.
+  s = s.replace(
+    /\[([^\]]+)\]\((\/artifacts\/[A-Za-z0-9_-]+\/[^\s)<>]+\.png)\)/g,
+    (_m, caption, url) => `![${caption}](${url})`,
+  );
+
+  // 3b) Ensure every /artifacts/*.png URL is wrapped in markdown image syntax
   //    so formatInline's chart replacement fires — even if the LLM wrote a
   //    bare URL or a stray <img> tag that got escaped.
   s = s.replace(

@@ -480,16 +480,25 @@ code, pre { font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monos
   object-fit: cover;
   display: block;
 }
+.artifact-broken {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #6e7681;
+  background: #0d1117;
+  letter-spacing: 0.02em;
+}
+.artifact-thumb {
+  position: relative;
+}
 
 .panel-empty {
   text-align: center;
   padding: 40px 20px;
   color: #6e7681;
-}
-.panel-empty-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
-  opacity: 0.5;
 }
 .panel-empty-text {
   font-size: 12px;
@@ -639,18 +648,20 @@ code, pre { font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monos
   color: #ff7b72;
 }
 .bubble-avatar {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
-  border-radius: 8px;
-  background: #13161d;
-  border: 1px solid #2e3441;
+  border-radius: 4px;
+  background: transparent;
+  border-left: 2px solid #2e3441;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 14px;
   font-weight: 600;
-  color: #9ee493;
+  color: #5a6478;
+  margin-top: 2px;
 }
 .bubble-body { flex: 1; min-width: 0; }
 .bubble-content p { margin: 0 0 8px 0; }
@@ -1251,11 +1262,6 @@ code, pre { font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monos
 }
 .followup-chip:active {
   transform: translateX(3px) scale(0.99);
-}
-.followup-icon {
-  color: #a8f0a0;
-  font-size: 14px;
-  flex-shrink: 0;
 }
 
 /* ---- Drag-drop overlay (chat area) ---- */
@@ -2503,7 +2509,26 @@ code, pre { font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monos
   font-size: 12px;
   color: #5a6478;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+}
+.landing-foot-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.landing-foot-sep {
+  color: #2e3441;
+}
+.landing-foot-link {
+  color: #8a93a3;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.landing-foot-link:hover {
+  color: #c9d1d9;
+  border-bottom-color: #9ee493;
 }
 
 /* ============= RESPONSIVE ============= */

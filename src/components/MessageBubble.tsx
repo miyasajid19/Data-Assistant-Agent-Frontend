@@ -81,7 +81,7 @@ export function MessageBubble({
     <div className="bubble-row assistant-row">
       <div className={`bubble assistant ${hasChart ? "has-chart" : ""}`}>
         <div className="bubble-avatar" aria-hidden>
-          ✦
+          ›
         </div>
         <div className="bubble-body" ref={bubbleRef}>
           {msg.content ? (

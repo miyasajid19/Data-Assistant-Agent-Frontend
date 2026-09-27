@@ -80,7 +80,7 @@ export function Landing() {
               <span className="landing-demo-dot" />
               <span className="landing-demo-dot" />
               <span className="landing-demo-dot" />
-              <span className="landing-demo-title">agent run · matches.csv</span>
+              <span className="landing-demo-title">agent run · sales.csv</span>
             </div>
             <div className="landing-demo-body">
               <div className="landing-demo-plan">
@@ -88,21 +88,23 @@ export function Landing() {
                   <PlanIcon size={14} /> Plan
                 </div>
                 <ol>
-                  <li>group rows by <code>Season</code></li>
-                  <li>count rows and render a bar chart</li>
+                  <li>group rows by <code>product_line</code></li>
+                  <li>sum <code>revenue</code> per group</li>
+                  <li>render a bar chart of the result</li>
                 </ol>
               </div>
               <div className="landing-demo-tools">
                 <span className="landing-demo-tool"><span className="landing-demo-tool-k">tool</span> plot_bar</span>
-                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> x=Season</span>
-                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> agg=count</span>
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> x=product_line</span>
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> y=revenue</span>
+                <span className="landing-demo-tool"><span className="landing-demo-tool-k">arg</span> agg=sum</span>
               </div>
               <div className="landing-demo-chart" aria-hidden="true">
                 <svg viewBox="0 0 280 110" preserveAspectRatio="none">
-                  {[28, 42, 38, 56, 64, 58, 72, 85, 78].map((h, i) => (
+                  {[32, 58, 24, 78, 46, 38, 64, 52].map((h, i) => (
                     <rect
                       key={i}
-                      x={10 + i * 30}
+                      x={14 + i * 32}
                       y={100 - h}
                       width={20}
                       height={h}
@@ -113,14 +115,15 @@ export function Landing() {
                   ))}
                 </svg>
                 <div className="landing-demo-chart-cap">
-                  Matches per season · 2008–2017
+                  Revenue by product line · 8 categories
                 </div>
               </div>
               <div className="landing-demo-msg landing-demo-msg-assistant">
                 <SparkleIcon size={14} />
                 <span>
-                  <strong>2013 had the most matches</strong> (76). The series
-                  trends up overall, with 2011–2013 the busiest stretch.
+                  <strong>One product line accounts for ~28% of revenue</strong> —
+                  the distribution is uneven, so a focused look at the top three
+                  is likely to cover most of the business.
                 </span>
               </div>
             </div>
@@ -150,17 +153,17 @@ export function Landing() {
               <div className="landing-bento-mock" aria-hidden="true">
                 <div className="landing-mock-file">
                   <UploadIcon size={12} />
-                  <span>matches.csv</span>
-                  <span className="landing-mock-meta">1.2 MB · 756 rows</span>
+                  <span>orders.csv</span>
+                  <span className="landing-mock-meta">1.2 MB · 12,408 rows</span>
                 </div>
                 <div className="landing-mock-file">
                   <UploadIcon size={12} />
-                  <span>deliveries.csv</span>
+                  <span>customers.csv</span>
                   <span className="landing-mock-meta">380 KB · 5,032 rows</span>
                 </div>
                 <div className="landing-mock-hint">
                   <SparkleIcon size={12} />
-                  joinable on <code>match_id</code> · suggested questions ready
+                  joinable on <code>customer_id</code> · suggested questions ready
                 </div>
               </div>
             </article>
@@ -282,9 +285,36 @@ export function Landing() {
 
       <footer className="landing-foot">
         <span>
-          Data Assistant Agent — MiniMax-M3, LangGraph, FastAPI, React
+          Data Assistant Agent — Ollama gemma4:31b-cloud, LangGraph, FastAPI, React
         </span>
-        <span>Built for Techvruk 2026</span>
+        <span className="landing-foot-author">
+          <span>Made by Sajid Miya</span>
+          <span className="landing-foot-sep" aria-hidden="true">·</span>
+          <a
+            className="landing-foot-link"
+            href="https://github.com/miyasajid19"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          <a
+            className="landing-foot-link"
+            href="https://linkedin.com/in/sajidmiya"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+          <a
+            className="landing-foot-link"
+            href="https://sajidmiya.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            sajidmiya.tech
+          </a>
+        </span>
       </footer>
     </div>
   );
